@@ -1,6 +1,5 @@
 const User = require('./model/user');
 const Role = require('./model/role');
-//const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const { validationResult } = require('express-validator');
@@ -22,18 +21,13 @@ class Controller {
       resp.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
       resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       if (!errors.isEmpty()) {
-        console.log(req)
+        //console.log(req)
         return resp.status(400).json({errors}); 
-        //message: 'Error registation',
       }
       const {username, userEmail, password} = req.body;
-      // console.log({username, password});
       const checkUser = await User.findOne({username});
       const checkEmail = await User.findOne({userEmail});
-       //await resp.header('Access-Control-Allow-Origin', '*');
-       //"Accept": "application/json",
-      // resp.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-      // resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
       if(checkUser) {
         return resp.status(400).json({message: 'This user name already exists'})
       }
@@ -45,7 +39,6 @@ class Controller {
 
       const user = new User({username, userEmail, password: passwordHash, roles: [userRole.value]});
       await user.save();
-      //await resp.header('Access-Control-Allow-Origin', '*');
       const token = generateAccesToken(user._id, user.roles);
       return resp.json({message: 'User was registration', token})
     } catch(e){
@@ -56,17 +49,14 @@ class Controller {
 
   async login(req, resp) {
     try {
-      //const {login, password} = req.body;
       
-      //const userEmail = user.userEmail;
-      //const email = await User.findOne({userEmail});
       const username = req.body?.username
       const userEmail = req.body?.userEmail
       const password = req.body?.password;
       const user = await User.findOne({$or: [ { username },  {userEmail} ]});
 
       if(!user) {
-        //username === user.userEmail
+  
         return resp.status(400).json({message: `User ${username} not found`})
       }
 
@@ -120,14 +110,32 @@ class Controller {
     resp.header('Access-Control-Allow-Origin', '*');
     resp.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    //resp.end()
-      // const userRole = new Role();
-      // const adminRole = new Role({value: 'ADMIN'});
-      // await userRole.save();
-      // await adminRole.save();
+    
       resp.json(users)
     } catch(e){
       console.error(e);
+    }
+  }
+
+   async getUserName(req, res, next) {
+    const userId = req.user?.id;
+  
+    if (!userId) {
+      return res.status(400).json({ message: `User ${req.user.id} ID must be provided` })
+    }
+  
+    try {
+      const user = await User.findById(userId)
+  
+      //req.user = user
+      const username = user.username;
+  
+      //next('route')
+      res.json({username})
+    } catch (e) {
+      console.error(e);
+      //console.log('getUser service')
+      //next(e)
     }
   }
 

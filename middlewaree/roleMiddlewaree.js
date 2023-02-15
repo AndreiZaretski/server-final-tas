@@ -9,10 +9,7 @@ module.exports = function (roles) {
   
     try {
       const token = req.headers.authorization.split(' ')[1];
-      //resp.header('Access-Control-Allow-Origin', '*')
-      //req.headers.authorization.split(' ')[1]
       if (!token) {
-        //resp.header('Access-Control-Allow-Origin', '*')
         return resp.status(403).json({message: 'User is not logged in'});
       }
   

@@ -16,6 +16,8 @@ check('password', 'Password may be more than 4 symboles and less than 10').isLen
 router.post('/login', controller.login);
 router.post('/loginEmail', check('userEmail', 'It is not valid email').isEmail(), controller.loginEmail);
 router.get('/users', controller.getUsers);
+
+router.get('/username', authMiddlewaree, controller.getUserName);
 //rolehMiddlewaree(['USER', 'ADMIN']), 
 //router.get('/logout',verefyacces,  controller.logOutUser);
 
