@@ -14,12 +14,21 @@ router.post('/registration', [check('username','Name is not be empty').notEmpty(
 check('password', 'Password may be more than 4 symboles and less than 10').isLength({min:4, max:10})
 ] ,controller.reg);
 router.post('/login', controller.login);
-router.post('/loginEmail', check('userEmail', 'It is not valid email').isEmail(), controller.loginEmail);
+// router.post('/loginEmail', check('userEmail', 'It is not valid email').isEmail(), controller.loginEmail);
 router.get('/users', controller.getUsers);
 
 router.get('/username', authMiddlewaree, controller.getUserName);
+router.delete('/delete',authMiddlewaree ,controller.deleteUser);
+router.get('/checkpassword', authMiddlewaree, controller.checkPassword);
+router.put('/updateusername', [check('username','Name is not be empty').notEmpty()], authMiddlewaree, controller.updateUserName);
+router.put('/updateuseremail', [check('userEmail', 'It is not valid email').isEmail()], authMiddlewaree, controller.updateUserEmail);
+
+router.put('/updaterole', authMiddlewaree, controller.getPremium)
 //rolehMiddlewaree(['USER', 'ADMIN']), 
 //router.get('/logout',verefyacces,  controller.logOutUser);
+//[check('username','Name is not be empty').notEmpty()],
+//, check('userEmail', 'It is not valid email').isEmail()
+
 
 module.exports = router; 
 
