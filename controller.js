@@ -59,7 +59,7 @@ class Controller {
 
       if(!user) {
   
-        return resp.status(400).json({message: `User ${username} not found`})
+        return resp.status(400).json({message: `User ${username || userEmail} not found`})
       }
 
       const validPassword = await argon2.verify(user.password, password);
