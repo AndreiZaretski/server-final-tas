@@ -25,7 +25,7 @@ class Controller {
         //console.log(req)
         return resp.status(400).json({errors}); 
       }
-      const {username, userEmail, password} = req.body;
+      let {username, userEmail, password} = req.body;
       const checkUser = await User.findOne({username});
       const checkEmail = await User.findOne({userEmail});
 
@@ -42,7 +42,9 @@ class Controller {
       await user.save();
       const token = generateAccesToken(user._id, user.roles);
       const roles = user.roles;
-      return resp.json({message: 'User was registered', token, roles})
+      username = user.username;
+      userEmail = user.userEmail;
+      return resp.json({message: 'User was registered', username, userEmail, token, roles})
     } catch(e){
       console.error(e);
       resp.status(400).json({message: 'Registration error'});
@@ -52,8 +54,8 @@ class Controller {
   async login(req, resp) {
     try {
       
-      const username = req.body?.username
-      const userEmail = req.body?.userEmail
+      const username = req.body?.username;
+      const userEmail = req.body?.userEmail;
       const password = req.body?.password;
       const user = await User.findOne({$or: [ { username },  {userEmail} ]});
 
@@ -124,14 +126,18 @@ class Controller {
     }
   try {
     const user = await User.findById(userId);
+    if(!user) {
+      return res.status(400).json({message:'User not found'})
+    }
     const validPassword = await argon2.verify(user.password, password);
     if(!validPassword) {
-      return res.status(400).json({ message: 'Password is incorrect'})
+      return res.status(400).json({ messageNo: 'Password is incorrect'})
     }
-
-    return res.json({message: 'Password is correct'})
+     const username = user.username
+    return res.json({messageOK: 'Password is correct', username})
   } catch (e) {
     console.error(e);
+    res.json({message1: 'Something went wrong'})
   }
   }
 
@@ -142,16 +148,20 @@ class Controller {
     const user = await User.findById(userId);
 
     if (!userId) {
-      res.status(400).json({message1: 'User ID must be provided'})
+      res.status(400).json({message: 'User ID must be provided'})
+    }
+
+    if (!user) {
+      res.status(400).json({message: 'User not found'})
     }
 
     const validPassword = await argon2.verify(user.password, password);
     if(!validPassword) {
-      return res.status(400).json({ message2: 'Password is incorrect'})
+      return res.status(400).json({ messageNo: 'Password is incorrect'})
     }
 
     user.remove()
-    return res.json({message: 'User was delete'});
+    return res.json({messageOK: 'User was delete'});
     } catch (e) {
       console.error(e);
       res.status(400).json({message: 'Delete error'})
@@ -182,17 +192,17 @@ class Controller {
        const newUser = await User.findByIdAndUpdate({_id: userId}, {username: name}, {new: true});
        //await newUser.send();
        if(!newUser) {
-        return res.status(400).json({message1:'User not found'})
+        return res.status(400).json({message:'User not found'})
       }
        const newUserName =  newUser.username;
        const newUserEmail = newUser.userEmail
        const roles = newUser.roles
-       return res.json({message: 'User updated', newUser,newUserName,newUserEmail, roles})
+       return res.json({messageOK: 'User updated', newUser, newUserName, newUserEmail, roles})
 
       } catch (e) {
         console.error(e);
         
-        return res.status(400).json({message3: 'Data can\'t update'})
+        return res.status(400).json({messageNo: 'Data can\'t update'})
       }
     }
 
@@ -218,17 +228,17 @@ class Controller {
          const newUser = await User.findByIdAndUpdate({_id: userId}, {userEmail: name}, {new: true});
          //await newUser.send();
          if(!newUser) {
-          return res.status(400).json({message1:'User not found'})
+          return res.status(400).json({message:'User not found'})
         }
         const newUserName =  newUser.username;
         const newUserEmail = newUser.userEmail
         const roles = newUser.roles
-        return res.json({message: 'User updated', newUser,newUserName,newUserEmail, roles})
+        return res.json({messageOK: 'User updated', newUser,newUserName,newUserEmail, roles})
   
         } catch (e) {
           console.error(e);
           
-          return res.status(400).json({message3: 'Data can\'t update'})
+          return res.status(400).json({messageNo: 'Data can\'t update'})
         }
       }
   //}
@@ -241,31 +251,60 @@ class Controller {
       return res.status(400).json({ message: `User ID must be provided` })
     }
 
-    if (key !== 'PREMIUM') {
-      return res.json({message: 'It is a wrong key'})
+    if (key !== 'RSSchool') {
+      return res.json({messageNo: 'It is a wrong key'})
     }
 
     try{
-      if (key ==='PREMIUM') {
+      if (key ==='RSSchool') {
         const user = await User.findOne({_id: userId});
         if (!user) {
           res.json({message: 'User not found'})
         }
 
-        //res.json({ message: 'n', user})
-
-        const newRole =user.roles.includes('PREMIUM')?user.roles: user.roles.push(key);
+        const newRole =user.roles.includes('PREMIUM')?user.roles: user.roles.push('PREMIUM');
 
         //await user.save();
 
         const updateUser = await user.updateOne({roles: user.roles}, {roles: newRole}, {new: true});
 
-        return res.json({message: 'Role updated', user, updateUser});
+        return res.json({messageOK: 'Role updated', user, updateUser});
       }
     } catch (e) {
       console.error(e);
       res.json({message: 'Something went wrong'})
     }
+  }
+
+  async updatePassword(req, res) {
+try {
+  const {username, password} = req.body;
+  const user = await User.findOne({username});
+
+  const errors = validationResult(req);
+      
+      if (!errors.isEmpty()) {
+        //console.log(req)
+        return res.status(400).json({errors}); 
+      }
+
+  if(!user) {
+      return res.status(400).json({message: `User ${username} not found`})
+  }
+  //return res.json({user});
+
+  const passwordHash = await argon2.hash(password);
+
+  user.password = passwordHash;
+  await user.save();
+
+  return res.json({messageOK: 'Password was updated'});
+
+} catch (e) {
+  console.error(e);
+  res.json({message: 'Something went wrong'})
+}
+   
   }
 
   // async logOutUser (req, resp) {

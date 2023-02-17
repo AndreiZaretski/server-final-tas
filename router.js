@@ -19,11 +19,13 @@ router.get('/users', controller.getUsers);
 
 router.get('/username', authMiddlewaree, controller.getUserName);
 router.delete('/delete',authMiddlewaree ,controller.deleteUser);
-router.get('/checkpassword', authMiddlewaree, controller.checkPassword);
-router.put('/updateusername', [check('username','Name is not be empty').notEmpty()], authMiddlewaree, controller.updateUserName);
-router.put('/updateuseremail', [check('userEmail', 'It is not valid email').isEmail()], authMiddlewaree, controller.updateUserEmail);
+router.post('/checkpassword', authMiddlewaree, controller.checkPassword);
+router.put('/updateusername', authMiddlewaree, [check('username','Name is not be empty').notEmpty()],  controller.updateUserName);
+router.put('/updateuseremail',authMiddlewaree, [check('userEmail', 'It is not valid email').isEmail()],  controller.updateUserEmail);
 
-router.put('/updaterole', authMiddlewaree, controller.getPremium)
+router.put('/updaterole', authMiddlewaree, controller.getPremium);
+router.put('/updatepassword', [check('password', 'Password may be more than 4 symboles and less than 10').isLength({min:4, max:10})
+], controller.updatePassword)
 //rolehMiddlewaree(['USER', 'ADMIN']), 
 //router.get('/logout',verefyacces,  controller.logOutUser);
 //[check('username','Name is not be empty').notEmpty()],
