@@ -27,7 +27,7 @@ module.exports = async function (req, resp, next) {
       return resp.status(401).json({ message: 'Access token has been expired' })
     }
 
-    console.log('*verifyAccess middleware')
+    console.log('VerifyAccess middleware')
     next(e)
   }
 }

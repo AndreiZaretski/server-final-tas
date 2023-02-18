@@ -22,7 +22,7 @@ class Controller {
       // resp.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
       // resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       if (!errors.isEmpty()) {
-        //console.log(req)
+    
         return resp.status(400).json({errors}); 
       }
       let {username, userEmail, password} = req.body;
@@ -44,7 +44,7 @@ class Controller {
       const roles = user.roles;
       username = user.username;
       userEmail = user.userEmail;
-      return resp.json({message: 'User was registered', username, userEmail, token, roles})
+      return resp.json({message: 'User is registered', username, userEmail, token, roles})
     } catch(e){
       console.error(e);
       resp.status(400).json({message: 'Registration error'});
@@ -82,12 +82,9 @@ class Controller {
 
   async getUsers(req, resp) {
     try {
-      const users = await User.find()
-    // resp.header('Access-Control-Allow-Origin', '*');
-    // resp.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    // resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      const users = await User.find();
     
-      resp.json(users)
+      resp.json(users);
     } catch(e){
       console.error(e);
       resp.status(400).json({message: 'Users are not defined'})
@@ -175,8 +172,6 @@ class Controller {
     const userId = req.user?.id;
     const name = req.body?.username;
 
-    //const user = await User.findById(userId);
-
     if (!userId) {
       return res.status(400).json({ message: `User ID must be provided` })
     }
@@ -190,7 +185,7 @@ class Controller {
 
       try {
        const newUser = await User.findByIdAndUpdate({_id: userId}, {username: name}, {new: true});
-       //await newUser.send();
+       
        if(!newUser) {
         return res.status(400).json({message:'User not found'})
       }
@@ -210,9 +205,7 @@ class Controller {
     async updateUserEmail(req, res) {
       const userId = req.user?.id;
       const name = req.body?.userEmail;
-  
-      //const user = await User.findById(userId);
-  
+   
       if (!userId) {
         return res.status(400).json({ message: `User ID must be provided` })
       }
@@ -226,7 +219,7 @@ class Controller {
   
         try {
          const newUser = await User.findByIdAndUpdate({_id: userId}, {userEmail: name}, {new: true});
-         //await newUser.send();
+         
          if(!newUser) {
           return res.status(400).json({message:'User not found'})
         }
@@ -264,8 +257,6 @@ class Controller {
 
         const newRole =user.roles.includes('PREMIUM')?user.roles: user.roles.push('PREMIUM');
 
-        //await user.save();
-
         const updateUser = await user.updateOne({roles: user.roles}, {roles: newRole}, {new: true});
 
         return res.json({messageOK: 'Role updated', user, updateUser});
@@ -284,14 +275,13 @@ try {
   const errors = validationResult(req);
       
       if (!errors.isEmpty()) {
-        //console.log(req)
+
         return res.status(400).json({errors}); 
       }
 
   if(!user) {
       return res.status(400).json({message: `User ${username} not found`})
   }
-  //return res.json({user});
 
   const passwordHash = await argon2.hash(password);
 
@@ -307,45 +297,6 @@ try {
    
   }
 
-  // async logOutUser (req, resp) {
-  //   //req.session.username = '';
-  //   req.username = '';
-  //   //const user = await User.findOne({username});
-  //   req.username = '';
-  //   //await resp.send(`Logged out',${resp.json(username)}`);
-  //   //await resp.json({username})
-  //   resp.send('Logged out')
-  // }
-
-  // async loginEmail(req, resp) {
-  //   try {
-  //     const errors = validationResult(req);
-  //     if (!errors.isEmpty()) {
-  //       console.log(req)
-  //       return resp.status(400).json({errors}); 
-  //     }
-  //     const {userEmail, password} = req.body;
-  //     const user = await User.findOne({userEmail});
-
-
-  //     if(!user) {
-  //       return resp.status(400).json({message: `User ${userEmail} not found`})
-  //     }
-
-  //     const validPassword = await argon2.verify(user.password, password);
-  //     if(!validPassword) {
-  //       return resp.status(400).json({ message: 'Password is incorrect'})
-  //     }
-  //     const token = generateAccesToken(user._id, user.roles);
-  //     const username = user.username;
-      
-  //     return resp.json({token, username});
-
-  //   } catch(e){
-  //     console.error(e);
-  //     resp.status(400).json({message: 'Login error'})
-  //   }
-  // }
 }
 
 module.exports = new Controller();
