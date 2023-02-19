@@ -33,7 +33,7 @@ class Controller {
         return resp.status(400).json({message: 'The user with this name already exists'})
       }
       if(checkEmail) {
-        return resp.status(400).json({message: 'The account with this email already exists'})
+        return resp.status(400).json({messageAcc: 'The account with this email already exists'})
       }
       const passwordHash = await argon2.hash(password);
       const userRole = await Role.findOne({value: 'USER'});
@@ -66,7 +66,7 @@ class Controller {
 
       const validPassword = await argon2.verify(user.password, password);
       if(!validPassword) {
-        return resp.status(400).json({ message: 'Password is incorrect'})
+        return resp.status(400).json({ messageKey: 'Password is incorrect'})
       }
       const token = generateAccesToken(user._id, user.roles);
       const username1 = user.username;
@@ -130,8 +130,8 @@ class Controller {
     if(!validPassword) {
       return res.status(400).json({ messageNo: 'Password is incorrect'})
     }
-     const username = user.username
-    return res.json({messageOK: 'Password is correct', username})
+     const userEmail = user.userEmail
+    return res.json({messageOK: 'Password is correct', userEmail})
   } catch (e) {
     console.error(e);
     res.json({message1: 'Something went wrong'})
@@ -259,7 +259,7 @@ class Controller {
 
         const updateUser = await user.updateOne({roles: user.roles}, {roles: newRole}, {new: true});
 
-        return res.json({messageOK: 'Role updated', user, updateUser});
+        return res.json({messageOK: 'Premium access is available', user, updateUser});
       }
     } catch (e) {
       console.error(e);
@@ -269,8 +269,8 @@ class Controller {
 
   async updatePassword(req, res) {
 try {
-  const {username, password} = req.body;
-  const user = await User.findOne({username});
+  const {userEmail, password} = req.body;
+  const user = await User.findOne({userEmail});
 
   const errors = validationResult(req);
       
@@ -280,7 +280,7 @@ try {
       }
 
   if(!user) {
-      return res.status(400).json({message: `User ${username} not found`})
+      return res.status(400).json({message: `User ${userEmail} not found`})
   }
 
   const passwordHash = await argon2.hash(password);
