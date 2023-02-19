@@ -13,7 +13,7 @@ app.use('/auth', router);
 const start = async () => {
   try {
     await mongoose.connect('mongodb+srv://Admin:final-task@cluster0.ic1uua6.mongodb.net/?retryWrites=true&w=majority')
-    app.listen(PORT, ()=> console.log(`sServer started on port ${PORT}`))
+    app.listen(PORT, ()=> console.log(`Server started on port ${PORT}`))
   } catch (e) {
     console.error(e);
   }
