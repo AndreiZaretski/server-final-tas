@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    
+    "dev": "nodemon index.js"
   },
+
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AndreiZaretski/server-final-tas.git"
