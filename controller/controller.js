@@ -1,18 +1,12 @@
-const User = require('./model/user');
-const Role = require('./model/role');
-const jwt = require('jsonwebtoken');
+const User = require('../model/user');
+const Role = require('../model/role');
+//const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const { validationResult } = require('express-validator');
-const {secret} = require('./config');
+
+const generateAccesToken = require('./helpcontroler/getToken');
 
 
-const generateAccesToken = (id, roles) => {
-   const payload = {
-    id,
-    roles
-   }
-   return jwt.sign(payload, secret, {expiresIn: '24h'} )
-}
 
 class Controller {
   async reg(req, resp) {
@@ -44,7 +38,7 @@ class Controller {
       const roles = user.roles;
       username = user.username;
       userEmail = user.userEmail;
-      return resp.json({message: 'User is registered', username, userEmail, token, roles})
+      return resp.json({message: 'User is registered', username, userEmail, token, roles});
     } catch(e){
       console.error(e);
       resp.status(400).json({message: 'Registration error'});
@@ -84,7 +78,7 @@ class Controller {
     try {
       const users = await User.find();
     
-      resp.json(users);
+      return resp.json(users);
     } catch(e){
       console.error(e);
       resp.status(400).json({message: 'Users are not defined'})
@@ -108,7 +102,7 @@ class Controller {
         const username = user.username;
         const userEmail = user.userEmail;
         const roles = user.roles
-        res.json({username, userEmail, roles})
+        return res.json({username, userEmail, roles})
     } catch (e) {
       console.error(e);
 
@@ -145,11 +139,11 @@ class Controller {
     const user = await User.findById(userId);
 
     if (!userId) {
-      res.status(400).json({message: 'User ID must be provided'})
+      return res.status(400).json({message: 'User ID must be provided'})
     }
 
     if (!user) {
-      res.status(400).json({message: 'User not found'})
+      return res.status(400).json({message: 'User not found'})
     }
 
     const validPassword = await argon2.verify(user.password, password);
@@ -192,7 +186,7 @@ class Controller {
        const newUserName =  newUser.username;
        const newUserEmail = newUser.userEmail
        const roles = newUser.roles
-       return res.json({messageOK: 'User updated', newUser, newUserName, newUserEmail, roles})
+       return res.json({messageOK: 'User updated',  newUserName, newUserEmail, roles})
 
       } catch (e) {
         console.error(e);
@@ -226,7 +220,7 @@ class Controller {
         const newUserName =  newUser.username;
         const newUserEmail = newUser.userEmail
         const roles = newUser.roles
-        return res.json({messageOK: 'User updated', newUser,newUserName,newUserEmail, roles})
+        return res.json({messageOK: 'User updated', newUserName,newUserEmail, roles})
   
         } catch (e) {
           console.error(e);
@@ -252,7 +246,7 @@ class Controller {
       if (key ==='RSSchool') {
         const user = await User.findOne({_id: userId});
         if (!user) {
-          res.json({message: 'User not found'})
+         return res.json({message: 'User not found'})
         }
 
         const newRole =user.roles.includes('PREMIUM')?user.roles: user.roles.push('PREMIUM');
