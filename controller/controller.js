@@ -41,7 +41,7 @@ class Controller {
       return resp.json({message: 'User is registered', username, userEmail, token, roles});
     } catch(e){
       console.error(e);
-      resp.status(400).json({message: 'Registration error'});
+      return resp.status(400).json({message: 'Registration error'});
     }
   }
 
@@ -70,7 +70,7 @@ class Controller {
 
     } catch(e){
       console.error(e);
-      resp.status(400).json({message: 'Login error'})
+      return resp.status(400).json({message: 'Login error'})
     }
   }
 
@@ -81,7 +81,7 @@ class Controller {
       return resp.json(users);
     } catch(e){
       console.error(e);
-      resp.status(400).json({message: 'Users are not defined'})
+      return resp.status(400).json({message: 'Users are not defined'})
     }
   }
 
@@ -97,7 +97,7 @@ class Controller {
        
 
         if(!user) {
-          return res.status(400).json({message1:'User not found'})
+          return res.status(400).json({message1:'User not found'});
         }
         const username = user.username;
         const userEmail = user.userEmail;
@@ -105,7 +105,7 @@ class Controller {
         return res.json({username, userEmail, roles})
     } catch (e) {
       console.error(e);
-
+      return res.status(400).json({message1:'User not found'});
     }
   }
 
@@ -128,7 +128,7 @@ class Controller {
     return res.json({messageOK: 'Password is correct', userEmail})
   } catch (e) {
     console.error(e);
-    res.json({message1: 'Something went wrong'})
+    return res.json({message1: 'Something went wrong'})
   }
   }
 
@@ -155,7 +155,7 @@ class Controller {
     return res.json({messageOK: 'User was delete'});
     } catch (e) {
       console.error(e);
-      res.status(400).json({message: 'Delete error'})
+      return res.status(400).json({message: 'Delete error'})
     }
 
     
@@ -257,7 +257,7 @@ class Controller {
       }
     } catch (e) {
       console.error(e);
-      res.json({message: 'Something went wrong'})
+      return res.json({message: 'Something went wrong'})
     }
   }
 
@@ -286,7 +286,7 @@ try {
 
 } catch (e) {
   console.error(e);
-  res.json({message: 'Something went wrong'})
+  return res.json({message: 'Something went wrong'})
 }
    
   }

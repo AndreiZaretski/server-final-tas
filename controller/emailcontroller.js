@@ -44,7 +44,7 @@ class Mail {
     } catch(e) 
     {
       console.error(e);
-      res.status(400).json({message: 'Email not sent'})
+      return res.status(400).json({message: 'Email not sent'})
     }
    }
 
@@ -80,7 +80,7 @@ class Mail {
     return res.json({messageOK: 'Password has been recovered', username, userEmail, token, roles});
   } catch(e) {
     console.error(e);
-    res.json({message:"Something went wrong"});
+    return res.json({message:"Something went wrong"});
   }
   }
 
@@ -105,7 +105,7 @@ class Mail {
       to: 'helpavaeditor@gmail.com',
       subject: `Message from ${userEmail}`,
       text: `${text} <br> ${userEmail}`,
-      html: `<b>Message:</b><br>${text} <br>  <br> This letter is from ${userEmail}`
+      html: `<b>Message:</b>  <br>${text} <br>  <br> This letter is from ${userEmail}`
     };
 
     const result = await transporter.sendMail(mailOptions); 
@@ -118,7 +118,7 @@ class Mail {
   } catch(e) 
   {
     console.error(e);
-    res.status(400).json({message: 'Email not sent, check the correctness of the entered mail'})
+    return res.status(400).json({message: 'Email not sent, check the correctness of the entered mail'})
   }
   }  
 }
