@@ -6,8 +6,6 @@ const controller = require('../controller/controller');
 const { check } = require('express-validator');
 
 const authMiddlewaree = require('../middlewaree/authMidlewaree');
-const rolehMiddlewaree = require('../middlewaree/roleMiddlewaree');
-const verifyaccess = require('../middlewaree/verefyacces');
 
 const mail = require('../controller/emailcontroller');
 
