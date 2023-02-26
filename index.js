@@ -2,7 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = require('./router/router');
 const cors = require('cors');
+const { MONGODB } = require('./config');
 const PORT = process.env.PORT || 5000;
+
+
 
 const app = express();
 
@@ -12,7 +15,7 @@ app.use('/auth', router);
 
 const start = async () => {
   try {
-    await mongoose.connect('mongodb+srv://Admin:final-task@cluster0.ic1uua6.mongodb.net/?retryWrites=true&w=majority')
+    await mongoose.connect(MONGODB)
     app.listen(PORT, ()=> console.log(`Server started on port ${PORT}`))
   } catch (e) {
     console.error(e);
