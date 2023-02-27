@@ -1,4 +1,4 @@
-Инструкция по запуску сервера:
+## Инструкция по запуску сервера:
 
 1. git clone https://github.com/AndreiZaretski/server-final-tas.git
 2. npm i
@@ -8,14 +8,16 @@
 6. Если что то пошло не так обращайтесь к разработчику данного продукта)
 
 
-Примеры запросов на постман
+## Примеры запросов на постман
 
 В body используется формат данных JSON
 
-<font size = 20>Регистрация:</font>
+## Регистрация:
 
 method POST
+
 url https://ava-editor-server-final-task-production.up.railway.app/auth/registration
+
 req body {
 "username":"123",
 "userEmail": "123@m.ru",
@@ -26,7 +28,8 @@ req body {
 
 ![Image alt](https://github.com/AndreiZaretski/server-final-tas/raw/master/src/registration.png)
 
-<font size = 20>Логин:</font>
+
+## Логин:
 
 method POST
 
@@ -42,7 +45,7 @@ req body {
 
 ![Image alt](https://github.com/AndreiZaretski/server-final-tas/raw/master/src/login.png)
 
-<font size = 20>Удаление, смена имени, почты, пароля, стать премиум</font>
+## Удаление, смена имени, почты, пароля, стать премиум
 
 Method DELETE - для удаления,
 PUT для смены данных
