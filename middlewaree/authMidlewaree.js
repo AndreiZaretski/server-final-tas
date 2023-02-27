@@ -17,6 +17,9 @@ module.exports = function (req, resp, next) {
   
     next();
   } catch(e) {
+    if (e.name === 'TokenExpiredError') {
+      return resp.status(401).json({ messageLog: 'Refresh token has been expired' })
+    }
     console.error(e);
     return resp.status(403).json({messageLog: 'User is not logged in'});
   }

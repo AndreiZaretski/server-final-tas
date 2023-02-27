@@ -105,7 +105,7 @@ class Mail {
       to: 'helpavaeditor@gmail.com',
       subject: `Message from ${userEmail}`,
       text: `${text} <br> ${userEmail}`,
-      html: `<b>Message:</b>  <br>${text} <br>  <br> This letter is from ${userEmail}`
+      html: `<b>Message:</b>  <br> <br> ${text} <br>  <br> This letter is from ${userEmail}`
     };
 
     const result = await transporter.sendMail(mailOptions); 
