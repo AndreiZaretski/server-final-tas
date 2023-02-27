@@ -13,9 +13,6 @@ router.post('/registration', [check('username','Name can not be empty').notEmpty
 check('password', 'Password length must be between 4 and 10 characters').isLength({min:4, max:10})
 ] ,controller.reg);
 router.post('/login', controller.login);
-
-router.get('/users', controller.getUsers);
-
 router.get('/username', authMiddlewaree, controller.getUserName);
 router.delete('/delete',authMiddlewaree ,controller.deleteUser);
 router.post('/checkpassword', authMiddlewaree, controller.checkPassword);

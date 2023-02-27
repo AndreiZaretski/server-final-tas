@@ -74,17 +74,7 @@ class Controller {
     }
   }
 
-  async getUsers(req, resp) {
-    try {
-      const users = await User.find();
-    
-      return resp.json(users);
-    } catch(e){
-      console.error(e);
-      return resp.status(400).json({message: 'Users are not defined'})
-    }
-  }
-
+  
    async getUserName(req, res, next) {
     const userId = req.user?.id;
   
