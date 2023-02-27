@@ -1,12 +1,3 @@
-## Инструкция по запуску сервера:
-
-1. git clone https://github.com/AndreiZaretski/server-final-tas.git
-2. npm i
-3. Для запуска сервера локально на windows необходимо удалить модуль npm uninstall argon2 --target_arch=x64 --target_platform=linux --target_libc=glibc
-4. Установить install argon2 без флагов
-5. npm start
-6. Если что то пошло не так обращайтесь к разработчику данного продукта)
-
 
 ## Примеры запросов на постман
 
@@ -88,3 +79,13 @@ req body {
 headers Authorization   bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmM4MmIwYTgwYTRkYzM5M2JlMWE2MiIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjc3NDk0MDg0LCJleHAiOjE2Nzc1ODA0ODR9.kvwjqC98PJFMIyxNqWcsmXkzCwUSqDoibjo3_5ri6J4
 
 ![Image alt](https://github.com/AndreiZaretski/server-final-tas/raw/master/src/delete.png)
+
+
+## Инструкция по запуску сервера локально:
+
+1. git clone https://github.com/AndreiZaretski/server-final-tas.git
+2. npm i
+3. Для запуска сервера локально на windows необходимо удалить модуль npm uninstall argon2 --target_arch=x64 --target_platform=linux --target_libc=glibc
+4. Установить install argon2 без флагов
+5. npm start
+6. Если что то пошло не так обращайтесь к разработчику данного продукта)
