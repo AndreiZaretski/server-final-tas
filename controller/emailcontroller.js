@@ -11,8 +11,8 @@ const keyArray = require('./helpcontroler/keyarray');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'helpavaeditor@gmail.com',
-    pass: 'metprvcoszmcdtqt'
+    user: 'Write your email here',
+    pass: 'Write your password here'
   }
 });
 
